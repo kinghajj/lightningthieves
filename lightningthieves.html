@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    var socket = io.connect();
+    socket.on('news', function(data) {
+        $("#now").text((new Date(data.now)).toLocaleTimeString());
+        $("#confirmed_rewards").text(data.confirmed_rewards);
+        $("#estimated_rewards").text(data.estimated_rewards);
+        $("#payout_history").text(data.payout_history);
+        $("#hashrate").text(data.hashrate);
+        var running = true;
+        for(var worker in data.workers) {
+          running = running && data.workers[worker].alive;
+        }
+        $("#running").text(running ? 'Yes' : 'NO!!!');
+    });
+  </script>
+</head>
+<body>
+  <table id="#stats">
+    <tr>
+      <td>Last Update</td>
+      <td>Running?</td>
+      <td>Confirmed Rewards</td>
+      <td>Estimated Rewards</td>
+      <td>Payout History</td>
+      <td>Hash Rate</td>
+    </tr>
+    <tr>
+      <td id="now"></td>
+      <td id="running"></td>
+      <td id="confirmed_rewards"></td>
+      <td id="estimated_rewards"></td>
+      <td id="payout_history"></td>
+      <td id="hashrate"></td>
+    </tr>
+  </table>
+</body>
+</html>
