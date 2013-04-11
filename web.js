@@ -10,13 +10,17 @@ var delay   = 60000;
 
 // I've had no luck using the native Node ways to fetch from HTTP, so, fuck it,
 // just use wget. Always reliable!
-function wget(url) {
-    return spawn('wget', ['-q', '-O', '-', url]);
+function curl(url) {
+    return spawn('curl', [url]);
 }
 
 // periodically fetch stats and emit them to clients
 function socket_handler(socket) {
-    wget(api_url).stdout.on('data', function(data) {
+    var fetch = curl(api_url)
+    fetch.on('error', function(err) {
+        socket.emit('errors', err);
+    });
+    fetch.stdout.on('data', function(data) {
         var pool_stats = JSON.parse(data);
         pool_stats.now = (new Date()).getTime();
         socket.emit('news', pool_stats);

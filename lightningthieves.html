@@ -5,6 +5,9 @@
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <script type="text/javascript">
     var socket = io.connect();
+    socket.on('errors', function(err) {
+      $("#errors").text(err.toString());
+    });
     socket.on('news', function(data) {
         $("#now").text((new Date(data.now)).toLocaleTimeString());
         $("#confirmed_rewards").text(data.confirmed_rewards);
@@ -20,6 +23,7 @@
   </script>
 </head>
 <body>
+  <p id="errors"></p>
   <table id="#stats">
     <tr>
       <td>Last Update</td>
