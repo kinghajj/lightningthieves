@@ -9,7 +9,7 @@ var api_url = 'http://ltc.kattare.com/api.php?api_key=64b0fea666d47d5dd5ec5d609b
 var delay   = 60000;
 
 // I've had no luck using the native Node ways to fetch from HTTP, so, fuck it,
-// just use wget. Always reliable!
+// just use curl. Always reliable!
 function curl(url) {
     return spawn('curl', [url]);
 }

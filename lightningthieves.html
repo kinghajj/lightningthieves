@@ -3,43 +3,57 @@
 <head>
   <script type="text/javascript" src="/jquery-1.9.1.min.js"></script>
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-  <script type="text/javascript">
+  <script type="text/javascript">$(function() {
+    var status = $("#status");
+    status.text('Connecting to news stream...');
     var socket = io.connect();
+    status.text('Waiting to receive first update...');
+    // show any errors as they occur
     socket.on('errors', function(err) {
       $("#errors").text(err.toString());
     });
     socket.on('news', function(data) {
-        $("#now").text((new Date(data.now)).toLocaleTimeString());
-        $("#confirmed_rewards").text(data.confirmed_rewards);
-        $("#estimated_rewards").text(data.estimated_rewards);
-        $("#payout_history").text(data.payout_history);
-        $("#hashrate").text(data.hashrate);
+        var then = new Date(data.now);
+        var now  = new Date();
+        status.text('Last update received at ' + now.toLocaleTimeString() +
+                    '; current as of ' + then.toLocaleTimeString());
+        // we're only 'running' if all workers are alive.
         var running = true;
         for(var worker in data.workers) {
           running = running && data.workers[worker].alive;
         }
+        // insert JSON data into appropriate table cells
+        $("#confirmed_rewards").text(data.confirmed_rewards);
+        $("#estimated_rewards").text(data.estimated_rewards);
+        $("#payout_history").text(data.payout_history);
+        $("#hashrate").text(data.hashrate);
         $("#running").text(running ? 'Yes' : 'NO!!!');
     });
+  });
   </script>
+  <style>
+  table, td, th {
+    border: 1px solid black;
+  }
+  </style>
 </head>
 <body>
-  <p id="errors"></p>
-  <table id="#stats">
+  <p id="status">Loading JavaScript...</p>
+  <p id="errors">No errors so far.</p>
+  <table id="stats">
     <tr>
-      <td>Last Update</td>
-      <td>Running?</td>
-      <td>Confirmed Rewards</td>
-      <td>Estimated Rewards</td>
-      <td>Payout History</td>
-      <td>Hash Rate</td>
+      <th>Running?</th>
+      <th>Hash Rate</th>
+      <th>Payout History</th>
+      <th>Confirmed Rewards</th>
+      <th>Estimated Rewards</th>
     </tr>
     <tr>
-      <td id="now"></td>
       <td id="running"></td>
+      <td id="hashrate"></td>
+      <td id="payout_history"></td>
       <td id="confirmed_rewards"></td>
       <td id="estimated_rewards"></td>
-      <td id="payout_history"></td>
-      <td id="hashrate"></td>
     </tr>
   </table>
 </body>
