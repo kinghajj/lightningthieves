@@ -9,26 +9,46 @@
     status.text('Connecting to news stream...');
     var socket = io.connect();
     status.text('Waiting to receive first update...');
-    // show any errors as they occur
-    socket.on('errors', function(err) {
-      $("#errors").text(err.toString());
-    });
-    socket.on('news', function(data) {
-        var then = new Date(data.now);
-        var now  = new Date();
-        status.text('Last update received at ' + now.toLocaleTimeString() +
-                    '; current as of ' + then.toLocaleTimeString());
-        // we're only 'running' if all workers are alive.
-        var running = true;
-        for(var worker in data.workers) {
-          running = running && data.workers[worker].alive;
-        }
-        // insert JSON data into appropriate table cells
-        $("#confirmed_rewards").text(data.confirmed_rewards);
-        $("#estimated_rewards").text(data.estimated_rewards);
-        $("#payout_history").text(data.payout_history);
-        $("#hashrate").text(data.hashrate);
-        $("#running").text(running ? 'Yes' : 'NO!!!');
+    socket.on('news', function(stats) {
+      var then = new Date(stats.now);
+      var now  = new Date();
+      status.text('Last update received at ' + now.toLocaleTimeString() +
+                  '; current as of ' + then.toLocaleTimeString());
+
+      var running = true;
+      for(var worker in stats.ktr.workers) {
+        running = running && stats.ktr.workers[worker].alive;
+      }
+
+      var last_ltcbtc = stats.btce_btc.ticker.last  * 1;
+      var last_ltcusd = stats.btce_usd.ticker.last  * 1;
+      var last_btcusd = stats.mtgox.data.last.value * 1;
+
+      var confirmed_rewards_ltc = stats.ktr.confirmed_rewards * 1;
+      var estimated_rewards_ltc = stats.ktr.estimated_rewards * 1;
+      var payout_history_ltc    = stats.ktr.payout_history    * 1;
+      var confirmed_rewards_btc = confirmed_rewards_ltc       * last_ltcbtc;
+      var estimated_rewards_btc = estimated_rewards_ltc       * last_ltcbtc;
+      var payout_history_btc    = payout_history_ltc          * last_ltcbtc;
+      var confirmed_rewards_usd = confirmed_rewards_ltc       * last_ltcusd;
+      var estimated_rewards_usd = estimated_rewards_ltc       * last_ltcusd;
+      var payout_history_usd    = payout_history_ltc          * last_ltcusd;
+
+      $("#running").text(running ? 'Yes' : 'NO!!!');
+      $("#hashrate").text(stats.ktr.hashrate);
+      $("#last_ltcbtc").text(last_ltcbtc);
+      $("#last_ltcusd").text(last_ltcusd);
+      $("#last_btcusd").text(last_btcusd);
+
+      $("#confirmed_rewards_ltc").text(confirmed_rewards_ltc);
+      $("#estimated_rewards_ltc").text(estimated_rewards_ltc);
+      $("#payout_history_ltc")   .text(payout_history_ltc);
+      $("#confirmed_rewards_btc").text(confirmed_rewards_btc);
+      $("#estimated_rewards_btc").text(estimated_rewards_btc);
+      $("#payout_history_btc")   .text(payout_history_btc);
+      $("#confirmed_rewards_usd").text(confirmed_rewards_usd);
+      $("#estimated_rewards_usd").text(estimated_rewards_usd);
+      $("#payout_history_usd")   .text(payout_history_usd);
     });
   });
   </script>
@@ -36,25 +56,60 @@
   table, td, th {
     border: 1px solid black;
   }
+  td, th {
+    padding: 0.3em;
+  }
+  td {
+    text-align: center;
+  }
+  td.number {
+    text-align: right;
+  }
   </style>
 </head>
 <body>
   <p id="status">Loading JavaScript...</p>
-  <p id="errors">No errors so far.</p>
   <table id="stats">
     <tr>
       <th>Running?</th>
       <th>Hash Rate</th>
+      <th>LTCBTC</th>
+      <th>LTCUSD</th>
+      <th>BTCUSD</th>
+    </tr>
+    <tr>
+      <td id="running"></td>
+      <td class="number" id="hashrate"></td>
+      <td class="number" id="last_ltcbtc"></td>
+      <td class="number" id="last_ltcusd"></td>
+      <td class="number" id="last_btcusd"></td>
+    </tr>
+  </table>
+  <br />
+  <table id="earnings">
+    <tr>
+      <th></th>
       <th>Payout History</th>
       <th>Confirmed Rewards</th>
       <th>Estimated Rewards</th>
     </tr>
     <tr>
-      <td id="running"></td>
-      <td id="hashrate"></td>
-      <td id="payout_history"></td>
-      <td id="confirmed_rewards"></td>
-      <td id="estimated_rewards"></td>
+      <th>LTC</th>
+      <td class="number" id="payout_history_ltc"></td>
+      <td class="number" id="confirmed_rewards_ltc"></td>
+      <td class="number" id="estimated_rewards_ltc"></td>
+    </tr>
+    <tr>
+      <th>BTC</th>
+      <td class="number" id="payout_history_btc"></td>
+      <td class="number" id="confirmed_rewards_btc"></td>
+      <td class="number" id="estimated_rewards_btc"></td>
+    </tr>
+    <tr>
+      <th>USD</th>
+      <td class="number" id="payout_history_usd"></td>
+      <td class="number" id="confirmed_rewards_usd"></td>
+      <td class="number" id="estimated_rewards_usd"></td>
     </tr>
   </table>
 </body>
