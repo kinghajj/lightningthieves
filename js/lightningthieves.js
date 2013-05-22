@@ -16,14 +16,16 @@ $(function() {
       running = running && stats.ktr.workers[worker].alive;
     }
     if(!running) {
-      $(".alert").show();
+      $("#not-running-error").show();
+      $("#running-ok").hide();
     } else {
-      $(".alert").hide();
+      $("#not-running-error").hide();
+      $("#running-ok").show();
     }
 
-    var last_ltcbtc = stats.btce_btc.ticker.last  * 1;
-    var last_ltcusd = stats.btce_usd.ticker.last  * 1;
-    var last_btcusd = stats.mtgox.data.last.value * 1;
+    var last_ltcbtc = stats.btce_ltcbtc.ticker.last  * 1;
+    var last_ltcusd = stats.btce_ltcusd.ticker.last  * 1;
+    var last_btcusd = stats.mtgox_btcusd.data.last.value * 1;
 
     var confirmed_rewards_ltc = stats.ktr.confirmed_rewards * 1;
     var estimated_rewards_ltc = stats.ktr.estimated_rewards * 1;

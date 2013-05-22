@@ -4,15 +4,19 @@
     <title>lightningthieves mining status</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="/css/lightningthieves.css" />
     <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="/lightningthieves.js"></script>
+    <script type="text/javascript" src="/js/lightningthieves.js"></script>
   </head>
-  <body style="padding-top: 30px;">
+  <body>
     <div class="container">
-      <div class="alert alert-error">
+      <div id="not-running-error" class="alert alert-error">
         <strong>Error!</strong> The mining rig appears to be down!
+      </div>
+      <div id="running-ok" class="alert alert-success">
+        <strong>Hurray!</strong> The mining rig appears to be running!
       </div>
       <p id="status">Loading JavaScript...</p>
       <table id="stats" class="table">
