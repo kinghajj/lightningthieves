@@ -10,7 +10,7 @@ var mtgox_url     = 'https://data.mtgox.com/api/2/BTCUSD/money/ticker';
 var btce_usd_url  = 'https://btc-e.com/api/2/ltc_usd/ticker';
 var btce_btc_url  = 'https://btc-e.com/api/2/ltc_btc/ticker';
 
-var server_fetch_delay = 60000;
+var server_fetch_delay = 60000 * 5;
 var client_emit_delay  = 60000;
 
 var last_ktr, last_mtgox, last_btce_usd, last_btce_btc;
