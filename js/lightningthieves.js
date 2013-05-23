@@ -1,6 +1,13 @@
 var stats;
 var converter;
 
+// only display up to four decimal places
+function display_money(money) {
+    var split = money.toString().split('.');
+    split[1] = split[1].substr(0,4);
+    return split.join('.');
+}
+
 function updatePage() {
   if(!stats) {
     return;
@@ -30,9 +37,9 @@ function updatePage() {
   $("#btce_ltcusd").text(last_ltcusd);
   $("#mtgox_btcusd").text(last_btcusd);
 
-  $("#confirmed_rewards").text(converter(stats.ktr.confirmed_rewards));
-  $("#estimated_rewards").text(converter(stats.ktr.estimated_rewards));
-  $("#payout_history").text(converter(stats.ktr.payout_history));
+  $("#confirmed_rewards").text(display_money(converter(stats.ktr.confirmed_rewards)));
+  $("#estimated_rewards").text(display_money(converter(stats.ktr.estimated_rewards)));
+  $("#payout_history").text(display_money(converter(stats.ktr.payout_history)));
 
   var hash_rate = stats.ktr.hashrate;
   var difficulty = stats.gml_api.difficulty;
@@ -40,7 +47,7 @@ function updatePage() {
 
   $("#hash_rate").text(hash_rate);
   $("#difficulty").text(difficulty);
-  $("#weekly_income").text(converter(weekly_income));
+  $("#weekly_income").text(display_money(converter(weekly_income)));
 }
 
 $(function() {
