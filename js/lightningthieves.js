@@ -2,6 +2,10 @@ var stats;
 var converter;
 
 function updatePage() {
+  if(!stats) {
+    return;
+  }
+
   var then   = new Date(stats.now);
   var now    = new Date();
 
@@ -26,10 +30,17 @@ function updatePage() {
   $("#btce_ltcusd").text(last_ltcusd);
   $("#mtgox_btcusd").text(last_btcusd);
 
-  $("#hash_rate").text(stats.ktr.hashrate);
   $("#confirmed_rewards").text(converter(stats.ktr.confirmed_rewards));
   $("#estimated_rewards").text(converter(stats.ktr.estimated_rewards));
   $("#payout_history").text(converter(stats.ktr.payout_history));
+
+  var hash_rate = stats.ktr.hashrate;
+  var difficulty = stats.gml_api.difficulty;
+  var weekly_income = 50 / difficulty / (Math.pow(2,48)/(Math.pow(2,16)-1)) * Math.pow(10,6) * 60 * 60 * 24 * 7 * (637.0/1000.0);
+
+  $("#hash_rate").text(hash_rate);
+  $("#difficulty").text(difficulty);
+  $("#weekly_income").text(converter(weekly_income));
 }
 
 $(function() {
@@ -41,32 +52,28 @@ $(function() {
       return ltc_amount;
     };
     $(".cur-currency").text("LTC");
-    if(stats)
-      updatePage();
+    updatePage();
   });
   $("#btn_btce_ltcbtc").click(function() {
     converter = function(ltc_amount) {
       return ltc_amount * stats.btce_ltcbtc.ticker.last;
     };
-    $(".cur-currency").text("BTCe LTCBTC");
-    if(stats)
-      updatePage();
+    $(".cur-currency").text("BTC");
+    updatePage();
   });
   $("#btn_btce_ltcusd").click(function() {
     converter = function(ltc_amount) {
       return ltc_amount * stats.btce_ltcusd.ticker.last;
     };
-    $(".cur-currency").text("BTCe LTCUSD");
-    if(stats)
-      updatePage();
+    $(".cur-currency").text("USD");
+    updatePage();
   });
   $("#btn_mtgox_btcusd").click(function() {
     converter = function(ltc_amount) {
       return ltc_amount * stats.btce_ltcbtc.ticker.last * stats.mtgox_btcusd.data.last.value;
     };
-    $(".cur-currency").text("BTCe LTCBTC -> MtGox BTCUSD");
-    if(stats)
-      updatePage();
+    $(".cur-currency").text("USD");
+    updatePage();
   });
 
   // trigger this to be the default.

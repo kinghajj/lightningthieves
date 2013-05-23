@@ -58,12 +58,11 @@
             </tbody>
           </table>
         </div>
-        <div class="span8">
-          <h3>Mining Info</h3>
-          <table id="mining-info" class="table table-bordered table-condensed">
+        <div class="span4">
+          <h3>Rewards</h3>
+          <table id="rewards-info" class="table table-bordered table-condensed">
             <thead>
               <tr>
-                <th>Hash Rate<br /><span class="sub-header">kh/s</span></th>
                 <th>Confirmed Rewards<br /><span class="sub-header cur-currency"></span></th>
                 <th>Estimated Rewards<br /><span class="sub-header cur-currency"></span></th>
                 <th>Payout History<br /><span class="sub-header cur-currency"></span></th>
@@ -71,10 +70,35 @@
             </thead>
             <tbody>
               <tr>
-                <td id="hash_rate"></td>
                 <td id="confirmed_rewards"></td>
                 <td id="estimated_rewards"></td>
                 <td id="payout_history"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="span4">
+          <h3>Mining</h3>
+          <table id="mining-info" class="table table-bordered table-condensed">
+            <thead>
+              <th>
+                Hash Rate
+                <br />
+                <span class="sub-header">Est. - kh/s</span></th>
+              <th>Difficulty<br /><span class="sub-header">&nbsp;</span></th>
+              <th>
+                Weekly Income
+                <br />
+                <span class="sub-header">
+                  Est. - <span class="cur-currency"></span>
+                </span>
+              </th>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="hash_rate"></td>
+                <td id="difficulty"></td>
+                <td id="weekly_income"></td>
               </tr>
             </tbody>
           </table>
