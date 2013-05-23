@@ -15,3 +15,7 @@ ul#chat {
     list-style-type: none;
     margin-left: 0;
 }
+
+h1 {
+    text-align: center;
+}

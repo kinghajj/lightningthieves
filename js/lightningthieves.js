@@ -91,6 +91,8 @@ $(function() {
   // trigger this to be the default.
   $("#btn_ltcltc").click();
 
+  $(".tooltip-link").tooltip({placement: 'bottom'});
+
   var connecting       = $("#connecting");
   var connected        = $("#connected");
   var connection_error = $("#connection_error");
