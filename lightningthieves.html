@@ -12,54 +12,74 @@
   </head>
   <body>
     <div class="container">
+      <h1>lightningthieves mining status center</h1>
       <div id="not-running-error" class="alert alert-error">
         <strong>Error!</strong> The mining rig appears to be down!
       </div>
       <div id="running-ok" class="alert alert-success">
         <strong>Hurray!</strong> The mining rig appears to be running!
       </div>
-      <p id="status">Loading JavaScript...</p>
-      <table id="stats" class="table">
-        <tr>
-          <th>Hash Rate</th>
-          <th>LTCBTC</th>
-          <th>LTCUSD</th>
-          <th>BTCUSD</th>
-        </tr>
-        <tr>
-          <td id="hashrate"></td>
-          <td id="last_ltcbtc"></td>
-          <td id="last_ltcusd"></td>
-          <td id="last_btcusd"></td>
-        </tr>
-      </table>
-      <br />
-      <table id="earnings" class="table">
-        <tr>
-          <th></th>
-          <th>Payout History</th>
-          <th>Confirmed Rewards</th>
-          <th>Estimated Rewards</th>
-        </tr>
-        <tr>
-          <th>LTC</th>
-          <td id="payout_history_ltc"></td>
-          <td id="confirmed_rewards_ltc"></td>
-          <td id="estimated_rewards_ltc"></td>
-        </tr>
-        <tr>
-          <th>BTC</th>
-          <td id="payout_history_btc"></td>
-          <td id="confirmed_rewards_btc"></td>
-          <td id="estimated_rewards_btc"></td>
-        </tr>
-        <tr>
-          <th>USD</th>
-          <td id="payout_history_usd"></td>
-          <td id="confirmed_rewards_usd"></td>
-          <td id="estimated_rewards_usd"></td>
-        </tr>
-      </table>
+
+      <div class="row">
+        <div class="span4">
+          <h3>Exchange Rates</h3>
+          <table id="exchange-rates" class="table table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>
+                  <button type="button" id="btn_ltcltc" class="btn btn-primary exchange-tooltip">LTCLTC</button>
+                  <br />
+                  <span class="sub-header">Always</span>
+                </th>
+                <th>
+                  <button type="button" id="btn_btce_ltcbtc" class="btn btn-primary exchange-tooltip">LTCBTC</button>
+                  <br />
+                  <span class="sub-header">BTC-e</span>
+                </th>
+                <th>
+                  <button type="button" id="btn_btce_ltcusd" class="btn btn-primary exchange-tooltip">LTCUSD</button>
+                  <br />
+                  <span class="sub-header">BTC-e</span>
+                </th>
+                <th>
+                  <button type="button" id="btn_mtgox_btcusd" class="btn btn-primary exchange-tooltip">BTCUSD</button>
+                  <br />
+                  <span class="sub-header">MtGox</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td id="btce_ltcbtc"></td>
+                <td id="btce_ltcusd"></td>
+                <td id="mtgox_btcusd"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="span8">
+          <h3>Mining Info</h3>
+          <table id="mining-info" class="table table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Hash Rate<br /><span class="sub-header">kh/s</span></th>
+                <th>Confirmed Rewards<br /><span class="sub-header cur-currency"></span></th>
+                <th>Estimated Rewards<br /><span class="sub-header cur-currency"></span></th>
+                <th>Payout History<br /><span class="sub-header cur-currency"></span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="hash_rate"></td>
+                <td id="confirmed_rewards"></td>
+                <td id="estimated_rewards"></td>
+                <td id="payout_history"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </body>
 </html>
