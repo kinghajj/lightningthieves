@@ -105,10 +105,28 @@ $(function() {
     updatePage();
   });
 
+  socket.on('chat', function(pack) {
+    // add chat line for received message
+    $('#chat').append('<li class="chat-line"><strong>' + pack.sender + '</strong>: ' + pack.msg + '</li>');
+    // remove excess messages
+    var chat_line_limit = 10;
+    while($(".chat-line").length > chat_line_limit) {
+      $('.chat-line:first').remove();
+    }
+  });
+
   $("#fetch").click(function() {
     socket.emit('fetch');
   });
+
   $("#refresh").click(function() {
     socket.emit('news');
+  });
+
+  $("#chat_form").submit(function() {
+    // send the message and clear the input
+    var chat_input = $("#chat_input");
+    socket.emit('chat', { msg: chat_input.val() });
+    chat_input.val('');
   });
 });

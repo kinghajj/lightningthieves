@@ -1,9 +1,10 @@
-var spawn   = require('child_process').spawn,
-    fs      = require('fs'),
-    path    = require('path'),
-    app     = require('http').createServer(http_handler),
-    io      = require('socket.io').listen(app),
-    url     = require('url');
+var spawn    = require('child_process').spawn,
+    fs       = require('fs'),
+    path     = require('path'),
+    app      = require('http').createServer(http_handler),
+    io       = require('socket.io').listen(app),
+    url      = require('url'),
+    sanitize = require('validator').sanitize;
 
 /* Remote JSON API tracking.
  */
@@ -118,7 +119,13 @@ function socket_handler(socket) {
     socket.on('fetch', function() {
         fetch();
         emit_bundle(socket);
-    })
+    });
+    socket.on('chat', function(pack) {
+        var now = (new Date()).getTime();
+        var sender = socket.handshake.address.address.toString();
+        var msg = sanitize(pack.msg).escape();
+        io.sockets.emit('chat', {now: now, sender: sender, msg: msg});
+    });
     socket_loop(socket);
 }
 

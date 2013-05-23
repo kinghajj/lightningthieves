@@ -10,3 +10,8 @@ th {
     font-size: xx-small;
     line-height: 6px;
 }
+
+ul#chat {
+    list-style-type: none;
+    margin-left: 0;
+}

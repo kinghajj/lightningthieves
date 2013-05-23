@@ -2,7 +2,8 @@
     "name": "lightningthieves",
     "version": "0.0.1",
     "dependencies": {
-        "socket.io": "0.9.x"
+        "socket.io": "0.9.x",
+        "validator": "1.1.x",
     },
     "engines": {
         "node": "0.10.x",
