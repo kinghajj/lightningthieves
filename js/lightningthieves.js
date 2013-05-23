@@ -18,7 +18,8 @@ function updatePage() {
   var server_now_time = new Date(stats.now);
   var last_news_time = $("#last_news_time");
   last_news_time.text('Last update received at ' + server_now_time.toLocaleTimeString() +
-                      '; last fetch made at ' + last_fetch_time.toLocaleTimeString());
+                      '; last fetch made at ' + last_fetch_time.toLocaleTimeString() +
+                      '. About ' + stats.connection_count + ' connections.');
 
   // check if workers running, possibly alert user
   var running = true;

@@ -35,6 +35,7 @@ var server_fetch_delay = 60000 * 5;
 var server_fetch_min_delay = 60000;
 var last_fetch_time;
 var client_emit_delay  = 60000;
+var connection_count = 0;
 
 // I've had no luck using the native Node ways to fetch from HTTP, so, fuck it,
 // just use curl. Always reliable!
@@ -84,7 +85,11 @@ fetch_loop();
 // bundle the source data and emit it to a socket.
 function emit_bundle(socket) {
     // bundle the tracked jsons together with the current time
-    var bundle = { now: (new Date()).getTime(), last_fetch_time: last_fetch_time };
+    var bundle = {
+        now: (new Date()).getTime(),
+        last_fetch_time: last_fetch_time,
+        connection_count: connection_count,
+    };
     for(var i in tracked_jsons) {
         if(tracked_jsons[i].last) {
             bundle[tracked_jsons[i].name] = tracked_jsons[i].last;
@@ -103,11 +108,16 @@ function socket_loop(socket) {
 
 // set up socket then start the loop.
 function socket_handler(socket) {
+    connection_count++;
+    socket.on('disconnect', function() {
+        connection_count--;
+    });
     socket.on('news', function() {
         emit_bundle(socket);
     });
     socket.on('fetch', function() {
         fetch();
+        emit_bundle(socket);
     })
     socket_loop(socket);
 }
