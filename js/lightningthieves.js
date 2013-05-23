@@ -93,8 +93,16 @@ $(function() {
   });
 
   var socket = io.connect();
+
   socket.on('news', function(news) {
     stats = news;
     updatePage();
+  });
+
+  $("#navbrand").click(function() {
+    socket.emit('fetch');
+  });
+  $("#refresh").click(function() {
+    socket.emit('news');
   });
 });

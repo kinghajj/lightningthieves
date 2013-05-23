@@ -32,6 +32,8 @@ var tracked_jsons = [
 ];
 
 var server_fetch_delay = 60000 * 5;
+var server_fetch_min_delay = 60000;
+var last_fetch_time;
 var client_emit_delay  = 60000;
 
 // I've had no luck using the native Node ways to fetch from HTTP, so, fuck it,
@@ -45,8 +47,13 @@ function err_handler(err) {
     console.log(err);
 }
 
-// fetch and update tracked jsons
-function fetch_loop() {
+// fetch from the sources and update
+function fetch(force) {
+    // don't fetch too often, unless this is part of the main fetch loop.
+    if(!force && last_fetch_time && (new Date()).getTime() - last_fetch_time < server_fetch_min_delay) {
+        return;
+    }
+
     for(var i in tracked_jsons) {
         var fetch = curl(tracked_jsons[i].url);
         fetch.on('error', err_handler);
@@ -57,17 +64,25 @@ function fetch_loop() {
         })(i);
     }
 
+    last_fetch_time = (new Date()).getTime();
+}
+
+// periodically fetch and update tracked jsons
+function fetch_loop() {
+    fetch(true);
+
     // try again after a certain delay
     setTimeout(fetch_loop, server_fetch_delay);
 }
 
+// begin the fetch loop
 fetch_loop();
 
 /* Socket.IO stuff.
  */
 
-// periodically emit stats to clients
-function socket_handler(socket) {
+// bundle the source data and emit it to a socket.
+function emit_bundle(socket) {
     // bundle the tracked jsons together with the current time
     var bundle = { now: (new Date()).getTime() };
     for(var i in tracked_jsons) {
@@ -78,10 +93,26 @@ function socket_handler(socket) {
 
     // emit them to the client
     socket.emit('news', bundle);
-
-    // do it again a while later
-    setTimeout(socket_handler, client_emit_delay, socket);
 }
+
+// periodically emit data to clients.
+function socket_loop(socket) {
+    emit_bundle(socket);
+    setTimeout(socket_loop, client_emit_delay, socket);
+}
+
+// set up socket then start the loop.
+function socket_handler(socket) {
+    socket.on('news', function() {
+        emit_bundle(socket);
+    });
+    socket.on('fetch', function() {
+        fetch();
+    })
+    socket_loop(socket);
+}
+
+// set up socket.io.
 io.sockets.on('connection', socket_handler);
 
 /* HTTP server logic.
