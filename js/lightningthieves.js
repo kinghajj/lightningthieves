@@ -92,9 +92,6 @@ $(function() {
     placement: 'bottom'
   });
 
-  // hide all alerts until we get some news
-  $(".alert").hide();
-
   var socket = io.connect();
   socket.on('news', function(news) {
     stats = news;
