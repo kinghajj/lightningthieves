@@ -84,7 +84,7 @@ fetch_loop();
 // bundle the source data and emit it to a socket.
 function emit_bundle(socket) {
     // bundle the tracked jsons together with the current time
-    var bundle = { now: (new Date()).getTime() };
+    var bundle = { now: (new Date()).getTime(), last_fetch_time: last_fetch_time };
     for(var i in tracked_jsons) {
         if(tracked_jsons[i].last) {
             bundle[tracked_jsons[i].name] = tracked_jsons[i].last;

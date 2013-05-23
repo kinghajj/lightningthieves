@@ -13,8 +13,12 @@ function updatePage() {
     return;
   }
 
-  var then   = new Date(stats.now);
-  var now    = new Date();
+  // update the update times
+  var last_fetch_time = new Date(stats.last_fetch_time);
+  var server_now_time = new Date(stats.now);
+  var last_news_time = $("#last_news_time");
+  last_news_time.text('Last update received at ' + server_now_time.toLocaleTimeString() +
+                      '; last fetch made at ' + last_fetch_time.toLocaleTimeString());
 
   // check if workers running, possibly alert user
   var running = true;
@@ -86,20 +90,21 @@ $(function() {
   // trigger this to be the default.
   $("#btn_ltcltc").click();
 
-  // currency button tooltips
-  $(".exchange-tooltip").tooltip({
-    title: "Click to convert the entries in the next table to this currency!",
-    placement: 'bottom'
-  });
+  var connecting       = $("#connecting");
+  var connected        = $("#connected");
+  var connection_error = $("#connection_error");
 
+  connecting.show();
   var socket = io.connect();
+  connecting.hide();
+  connected.show();
 
   socket.on('news', function(news) {
     stats = news;
     updatePage();
   });
 
-  $("#navbrand").click(function() {
+  $("#fetch").click(function() {
     socket.emit('fetch');
   });
   $("#refresh").click(function() {

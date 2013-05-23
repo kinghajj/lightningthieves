@@ -15,10 +15,12 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a id="navbrand" class="brand" href="#">lightningthieves</a>
+          <a id="navbrand" class="brand" href="/">lightningthieves</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li><a href="#aboutModal" role="button" data-toggle="modal">About</a>
+              <li><a id="fetch" href="#">Fetch</a></li>
+              <li><a id="refresh" href="#">Refresh</a></li>
+              <li><a href="#aboutModal" role="button" data-toggle="modal">About</a></li>
             </ul>
           </div>
         </div>
@@ -59,42 +61,16 @@
 
     <div class="container">
       <h1>lightningthieves mining status center</h1>
-
-      <div id="not-running-error" class="alert alert-error hide">
-        <strong>Error!</strong> The mining rig appears to be down!
-      </div>
-      <div id="running-ok" class="alert alert-success hide">
-        <strong>Hurray!</strong> The mining rig appears to be running!
-      </div>
-
-      <button id="refresh" class="btn btn-primary">Refresh</button>
-
       <div class="row">
-        <div class="span4">
+        <div class="span3">
           <h3>Exchange Rates</h3>
           <table id="exchange-rates" class="table table-bordered table-condensed">
             <thead>
               <tr>
-                <th>
-                  <button type="button" id="btn_ltcltc" class="btn btn-primary exchange-tooltip">LTCLTC</button>
-                  <br />
-                  <span class="sub-header">Always</span>
-                </th>
-                <th>
-                  <button type="button" id="btn_btce_ltcbtc" class="btn btn-primary exchange-tooltip">LTCBTC</button>
-                  <br />
-                  <span class="sub-header">BTC-e</span>
-                </th>
-                <th>
-                  <button type="button" id="btn_btce_ltcusd" class="btn btn-primary exchange-tooltip">LTCUSD</button>
-                  <br />
-                  <span class="sub-header">BTC-e</span>
-                </th>
-                <th>
-                  <button type="button" id="btn_mtgox_btcusd" class="btn btn-primary exchange-tooltip">BTCUSD</button>
-                  <br />
-                  <span class="sub-header">MtGox</span>
-                </th>
+                <th id="btn_ltcltc">LTCLTC<br /><span class="sub-header">Always</span></th>
+                <th id="btn_btce_ltcbtc">LTCBTC<br /><span class="sub-header">BTC-e</span></th>
+                <th id="btn_btce_ltcusd">LTCUSD<br /><span class="sub-header">BTC-e</span></th>
+                <th id="btn_mtgox_btcusd">BTCUSD<br /><span class="sub-header">MtGox</span></th>
               </tr>
             </thead>
             <tbody>
@@ -106,10 +82,7 @@
               </tr>
             </tbody>
           </table>
-        </div>
-
-        <div class="span4">
-          <h3>Rewards</h3>
+          <h3>Pool Rewards</h3>
           <table id="rewards-info" class="table table-bordered table-condensed">
             <thead>
               <tr>
@@ -126,10 +99,13 @@
               </tr>
             </tbody>
           </table>
-        </div>
-
-        <div class="span4">
           <h3>Mining</h3>
+          <div id="not-running-error" class="alert alert-error hide">
+            <strong>Error!</strong> The mining rig is down!
+          </div>
+          <div id="running-ok" class="alert alert-success hide">
+            <strong>Hurray!</strong> The mining rig is running!
+          </div>
           <table id="mining-info" class="table table-bordered table-condensed">
             <thead>
               <tr>
@@ -156,6 +132,37 @@
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="span6">
+          <h2>Details</h2>
+          <p>The server periodically fetches from various
+            <a href="http://en.wikipedia.org/wiki/JSON">JSON</a> APIs. When you
+            load this page, a connection between your browser and the server
+            keeps this page up-to-date with the latest data.
+          </p>
+          <p>
+            You can press the table headings of the exchange rates to change the
+            units displayed in the other tables.
+          </p>
+          <p>
+            You can press the "Fetch" button on the top to request that the
+            server fetch data from its sources again (though the server prevents
+            you from requesting this too often.) The "Refresh" button updates
+            the page with new data sooner than the usual schedule.
+          </p>
+        </div>
+        <div class="span3">
+          <h3>Connection Status</h3>
+          <div id="connecting" class="alert alert-info hide">
+            <strong>Connecting...</strong>
+          </div>
+          <div id="connected" class="alert alert-success hide">
+            <strong>Connected.</strong> The page should function normally.
+          </div>
+          <div id="connection-error" class="alert alert-error hide">
+            <strong>Error!</strong> The connection could not be established.
+          </div>
+          <span id="last_news_time">No updates have been received yet.</span>
         </div>
       </div>
     </div>
